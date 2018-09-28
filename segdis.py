@@ -24,12 +24,25 @@ digit_y2 = 220
 # is a Rectangle object defined by the graphics.py library. We must set 
 # the position of each segment so that they line up properly.
 
+
+# The order that you will see used continuously in the code is as follow.
+
+# Center, Top Left, Bottom Left, Bottom, Top Right, Bottom Right, Top
+
+# C	  TL	    BL		 B	 TR	    BR		  T
+# 1st	  2nd	    3rd		 4th	 5th	    6th		  7th
+
+
+# This is the order in which we iterate through the elements in the dictionary,
+# informing what
+
+
 center_segment = Rectangle(Point(digit_x1+10, digit_y1+50), Point(digit_x2-10, 180 ))
 top_left_segment = Rectangle(Point(digit_x1 + 10,  digit_y1+90), Point(digit_x1 , 180))
 bottom_left_segment = Rectangle(Point(digit_x1, digit_y1+10), Point(digit_x1 + 10, 170))
 bottom_segment = Rectangle(Point(digit_x1 + 10, digit_y1+10), Point(digit_x2 - 10, (digit_y2/2)+10))
-bottom_right_segment = Rectangle(Point(digit_x1+70, digit_y1+10), Point(digit_x1 + 60, 170))
 top_right_segment = Rectangle(Point(digit_x1 + 70, digit_y1+60), Point(digit_x2 - 10, digit_y2-10))
+bottom_right_segment = Rectangle(Point(digit_x1+70, digit_y1+10), Point(digit_x1 + 60, 170))
 top_segment = Rectangle(Point(digit_x1+10, digit_y1+90), Point(digit_x2-10, 220))
 
 # This dictionary holds each segment of the display with a corresponding
@@ -37,13 +50,14 @@ top_segment = Rectangle(Point(digit_x1+10, digit_y1+90), Point(digit_x2-10, 220)
 # screen. When it it set to false, it does not illuminate.
 
 segments = {
-    bottom_left_segment: False,
-    top_left_segment: False,
-    bottom_segment: False,
-    top_segment: False,
+
     center_segment: False,
+    top_left_segment: False,
+    bottom_left_segment: False,
+    bottom_segment: False,
     top_right_segment: False,
-    bottom_right_segment: True
+    bottom_right_segment: False,
+    top_segment: False
 }
 
 # Note these are *not* the binary representation of these decimal numbers,
@@ -72,13 +86,7 @@ for value in segments:
 
 # Gets input from a String
 def parseBits(inputString):
-    validInput = False
-    
-    if ((len(inputString) < 7) or (len(inputString) > 7)):
-       return "7 bit numbers only" 
-
-    elif (len(inputString) == 7):
-        validInput = True 
+    if (len(inputString) == 7):
         i = 0
         for key in segments:
             if inputString[i] == "0": 
@@ -112,9 +120,10 @@ def main():
     # The graphics.py library doesn't appear to have a main loop, so we'll make our own.
     # All possible program states branch off and are dispatched by this main method.
    
-    while True: 
-        inputString = str(input("Enter a 7 digit binary string: \n" + "BR TR T C TL BL B\n"))
+    while True:
+        inputString = str(input("Enter a 7 digit binary string: \n" + "C TL BL B BR TR T \n"))
         parseBits(inputString)
         clearScreen() 
         drawDigit(segments)
+        print(segments.values())
 main()
