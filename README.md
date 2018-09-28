@@ -2,6 +2,9 @@
 Python implementation of a seven-segment display.
 
 
+![screenshot](screenshot.png)
+
+
 |     | Center  | Top Left | Bottom Left | Bottom  | Top Right | Bottom Right |   Top   |
 |----------------------|---------|----------|-------------|---------|-----------|--------------|---------|
 | Abbreviation | (C)     | (TL)     | (BL)        | (B)     | (TR)      | (BR)         | (T)     |
