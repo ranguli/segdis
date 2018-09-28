@@ -37,41 +37,84 @@ top_segment = Rectangle(Point(digit_x1+10, digit_y1+90), Point(digit_x2-10, 220)
 # screen. When it it set to false, it does not illuminate.
 
 segments = {
-    bottom_left_segment: True,
-    top_left_segment: True,
-    bottom_segment: True,
-    top_segment: True,
+    bottom_left_segment: False,
+    top_left_segment: False,
+    bottom_segment: False,
+    top_segment: False,
     center_segment: False,
-    top_right_segment: True,
+    top_right_segment: False,
     bottom_right_segment: True
 }
+
+# Note these are *not* the binary representation of these decimal numbers,
+# but the binary representation of what segments must be on/off to 
+# represent the decimal number on screen.
+
+decimal_lookup_table = {
+    "0": "1110111",
+    "1": "1100000",
+    "2": "0111011",
+    "3": "1111001",
+    "4": "1101100",
+    "5": "1011101",
+    "6": "1011111",
+    "7": "1110000",
+    "8": "1111111",
+    "9": "1111101" 
+}
+
+
 
 # Set the colour of all segments to red
 for value in segments:
     value.setFill("red")
 
-def getInput():
+
+# Gets input from a String
+def parseBits(inputString):
     validInput = False
-    while not validInput:
-        inputString = str(input("Enter a 7 digit binary string: \n" + "T C TL BL B BR TR \n"))
-        inputString = list(inputString) 
-        if (len(inputString) != 7):
-            print("Try again.") 
-        if (len(inputString) == 7):
-            validInput = True 
-            i = 0
-            for key in segments:
-                if inputString[i] == "0": 
-                    segments[key] = False
-                elif inputString[i] == "1":
-                    segments[key] = True 
-                i += 1
+    
+    if ((len(inputString) < 7) or (len(inputString) > 7)):
+       return "7 bit numbers only" 
 
-getInput()
+    elif (len(inputString) == 7):
+        validInput = True 
+        i = 0
+        for key in segments:
+            if inputString[i] == "0": 
+                segments[key] = False
+            elif inputString[i] == "1":
+                segments[key] = True 
+            i += 1
 
-while True:
-    for segment, boolean in segments.items(): 
+
+def showOff():
+    for key in decimal_lookup_table:
+        inputString = decimal_lookup_table[key]
+    for segment, boolean in segments.items():
         segment.undraw()
         if (boolean is True):
+            segment.draw(window)
+
+
+def drawDigit(segments):
+    for segment, boolean in segments.items(): 
+        if (boolean is True):
             segment.draw(window) 
-    getInput()
+        if (boolean is False):
+            segment.undraw() 
+        
+def clearScreen():
+    for segment, boolean in segments.items(): 
+        segment.undraw() 
+        
+def main():
+    # The graphics.py library doesn't appear to have a main loop, so we'll make our own.
+    # All possible program states branch off and are dispatched by this main method.
+   
+    while True: 
+        inputString = str(input("Enter a 7 digit binary string: \n" + "BR TR T C TL BL B\n"))
+        parseBits(inputString)
+        clearScreen() 
+        drawDigit(segments)
+main()
